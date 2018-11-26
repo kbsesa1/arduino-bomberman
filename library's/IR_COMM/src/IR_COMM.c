@@ -6,7 +6,7 @@
  */ 
 
 #include "IR_COMM.h"
-#include <stdbool.h>
+
 
 const int sendTimes[] = {20,40,60,80,20};//number of ticks to set led(low,high,start,stop,divider)
 uint8_t sendFrame[23];//array to save lengths of pulses
@@ -17,11 +17,11 @@ int sendingFrame = 0;//bool if arduino is busy sending
 
 int recievelookup[4];
 const int recieveTimes38_38[] = {43,65,90,110};
-const int recieveTimes38_56[] = {32,49,65,81};
+const int recieveTimes38_56[] = {30,44,61,74};
 const int recieveTimes56_56[] = {47,70,96,118};
 const int recieveTimes56_38[] = {63,94,129,158};
-const int devPos = 3;
-const int devNeg = 3;
+const int devPos = 5;
+const int devNeg = 5;
 
 //private recieve variables
 volatile unsigned long IR_ticks;
@@ -129,9 +129,8 @@ char IR_Recieve(){
 	}
 	
 }
-/*
+
 void IR_printRaw(){
-char output[30];
 for (int i = 0;i<13;i++)
 {
 USART_PutInt(rawFrame[i]);
@@ -139,7 +138,7 @@ USART_PutString(", ");
 
 }
 USART_Transmit('\n');
-rawAvailable = 0;
+rawNew = 0;
 }
 void IR_printFrame(){
 for (int i = 0;i<13;i++)
@@ -151,7 +150,7 @@ USART_PutString(", ");
 USART_Transmit('\n');
 
 }
-*/
+
 bool IR_Available(){
 	return irAvaliable;
 }

@@ -13,21 +13,18 @@
 #include <stdio.h>
 #include <avr/interrupt.h>
 #include <stdbool.h>
+#include "SimpleUart.h"
 
 
-	void Init();
-	char Recieve();
-	bool Available();
-	/*
+	void IR_Init();
+	char IR_Recieve();
+	bool IR_Available();
+	
 	void IR_printRaw();
 	void IR_printFrame();
-	*/
-	void flush();
-	bool rawAvailable();
-	void Transmit(char);
 	
-	
-	
-	
-
+	void IR_flush();
+	bool IR_rawAvailable();
+	void IR_Transmit(char);
+		
 #endif /* IR_COMM_H_ */
