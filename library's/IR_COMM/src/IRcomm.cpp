@@ -1,20 +1,16 @@
 /*
- * IR_COMM.c
- *
- * Created: 23-11-2018 17:00:47
- *  Author: joost
- */ 
-
-#include "IR_COMM.h"
-
+* CPPFile1.cpp
+*
+* Created: 28-11-2018 13:33:31
+*  Author: joost
+*/
+#include "IRcomm.h"
 
 const int sendTimes[] = {20,40,60,80,20};//number of ticks to set led(low,high,start,stop,divider)
 uint8_t sendFrame[23];//array to save lengths of pulses
 int sendIndex = 0;//index for pulsearray
-
 int newFrame = 0;//bool if arduino should start sending
 int sendingFrame = 0;//bool if arduino is busy sending
-
 int recievelookup[4];
 const int recieveTimes38_38[] = {40,60,80,100};
 const int recieveTimes38_56[] = {30,44,61,74};
@@ -22,7 +18,6 @@ const int recieveTimes56_56[] = {47,70,96,118};
 const int recieveTimes56_38[] = {63,94,129,158};
 const int devPos = 5;
 const int devNeg = 5;
-
 //private recieve variables
 volatile unsigned long IR_ticks;
 volatile unsigned long last_IR_ticks;
@@ -31,8 +26,6 @@ volatile unsigned long pulseEnd = 0;
 volatile uint8_t frameBuffer[11];
 volatile int frameIndex = 0;
 volatile bool irAvaliable = 0;
-
-
 //debug recieve variables
 volatile bool unknownTime = 0;
 volatile int rawFrame[11];
@@ -40,8 +33,10 @@ volatile int rawindex;
 volatile bool rawNew = 0;
 volatile int decodeFrame[11];
 
-
-void IR_Init(int sendFreq,int recFreq){
+IR::IR(){
+	
+}
+void IR::Init(int sendFreq,int recFreq){
 	//set ir led port to output
 	DDRD |= (1 << PORTD3);
 	//set timer to toggle on compare match
@@ -103,18 +98,12 @@ void IR_Init(int sendFreq,int recFreq){
 	}
 	
 	
-	for (int i = 0;i<4;i++)
-	{
-		USART_PutInt(recievelookup[i]);
-		USART_PutString(", ");
-	}
-	USART_PutString("\n");
 	
 	//enable global interrupt
 	sei();
 	
 }
-char IR_Recieve(){
+char IR::Recieve(){
 	irAvaliable = 0;
 	char output = 0;
 	for (int i = 0;i<8;i++)
@@ -135,8 +124,8 @@ char IR_Recieve(){
 	}
 	
 }
-
-void IR_printRaw(){
+/*print functions
+void IR::printRaw(){
 for (int i = 0;i<11;i++)
 {
 USART_PutInt(rawFrame[i]);
@@ -146,7 +135,7 @@ USART_PutString(", ");
 USART_Transmit('\n');
 rawNew = 0;
 }
-void IR_printFrame(){
+void IR::printFrame(){
 for (int i = 0;i<11;i++)
 {
 USART_PutInt(frameBuffer[i]);
@@ -156,15 +145,14 @@ USART_PutString(", ");
 USART_Transmit('\n');
 
 }
-
-bool IR_Available(){
+*/
+bool IR::Available(){
 	return irAvaliable;
 }
-
-bool IR_rawAvailable(){
+bool IR::rawAvailable(){
 	return rawNew;
 }
-void IR_Transmit(char input){
+void IR::Transmit(char input){
 	sendFrame[0] = 2;
 	uint8_t framePos = 1;
 	sendFrame[framePos] = 4;
@@ -212,7 +200,7 @@ void decode(){
 		{
 			frameBuffer[i] = 3;
 		}
-		else 
+		else
 		{
 			frameBuffer[i] = 4;
 		}

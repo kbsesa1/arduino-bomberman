@@ -12,9 +12,9 @@
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>IR_test</AssemblyName>
-    <Name>IR_test</Name>
-    <RootNamespace>IR_test</RootNamespace>
+    <AssemblyName>ir_test_cpp</AssemblyName>
+    <Name>ir_test_cpp</Name>
+    <RootNamespace>ir_test_cpp</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
@@ -153,16 +153,16 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="main.c">
+    <Compile Include="IRcomm.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="IR_COMM.c">
+    <Compile Include="IRcomm.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="IR_COMM.h">
+    <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="SimpleUart.c">
+    <Compile Include="SimpleUart.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="SimpleUart.h">

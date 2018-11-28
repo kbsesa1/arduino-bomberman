@@ -2,9 +2,9 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
-main.c
+IRcomm.cpp
 
-IR_COMM.c
+main.cpp
 
-SimpleUart.c
+SimpleUart.cpp
 

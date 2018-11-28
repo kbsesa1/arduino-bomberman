@@ -1,4 +1,10 @@
 /*
+ * SimpleUart.cpp
+ *
+ * Created: 28-11-2018 13:34:47
+ *  Author: joost
+ */ 
+/*
  * SimpleUart.c
  *
  * Created: 25-11-2018 22:16:00
@@ -7,8 +13,14 @@
 
 #include "SimpleUart.h"
 
-void USART_Init( unsigned int ubrr)
+UART::UART(){
+	
+}
+
+void UART::Init( unsigned long f_cpu,unsigned long baud)
 {
+	/*calculate baud register*/
+unsigned int ubrr = f_cpu/16/baud-1;
 	/*Set baud rate */
 	UBRR0H = (unsigned char)(ubrr>>8);
 	UBRR0L = (unsigned char)ubrr;
@@ -17,7 +29,7 @@ void USART_Init( unsigned int ubrr)
 	/* Set frame format: 8data, 2stop bit */
 	UCSR0C = (3<<UCSZ00);
 }
-void USART_Transmit( unsigned char data )
+void UART::Transmit( unsigned char data )
 {
 	/* Wait for empty transmit buffer */
 	while ( !( UCSR0A & (1<<UDRE0)) )
@@ -25,7 +37,7 @@ void USART_Transmit( unsigned char data )
 	/* Put data into buffer, sends the data */
 	UDR0 = data;
 }
-unsigned char USART_Receive()
+unsigned char UART::Receive()
 {
 	/* Wait for data to be received */
 	while ( !(UCSR0A & (1<<RXC0)) )
@@ -33,19 +45,19 @@ unsigned char USART_Receive()
 	/* Get and return received data from buffer */
 	return UDR0;
 }
-void USART_PutString(char* string){
+void UART::PutString(char* string){
 	for (int i = 0;i<strlen(string);i++)
 	{
-		USART_Transmit(string[i]);
+	Transmit(string[i]);
 	}
 }
-void USART_PutInt(int input){
+void UART::PutInt(int input){
 	char str[20];
 	sprintf(str, "%d", input);
-	USART_PutString(str);
+	PutString(str);
 }
-void USART_PutUInt(int input){
+void UART::PutUInt(int input){
 	char str[20];
 	sprintf(str, "%u", input);
-	USART_PutString(str);
+	PutString(str);
 }
