@@ -1,4 +1,5 @@
-SimpleUart.d SimpleUart.o: .././SimpleUart.cpp .././SimpleUart.h \
+lib/SimpleUart.d lib/SimpleUart.o: ../lib/SimpleUart.cpp \
+ ../lib/SimpleUart.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -15,7 +16,7 @@ SimpleUart.d SimpleUart.o: .././SimpleUart.cpp .././SimpleUart.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h
 
-.././SimpleUart.h:
+../lib/SimpleUart.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 

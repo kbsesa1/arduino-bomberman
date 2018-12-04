@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <avr/interrupt.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include "SimpleUart.h"
 
 class IR
 {
@@ -20,10 +22,11 @@ class IR
 	IR();
 	void Init(int,int);
 	char Recieve();
-	bool Available();
+	int Available();
 	bool rawAvailable();
 	void Transmit(char);
-	
+	char* printRaw();
+
 };
 
 

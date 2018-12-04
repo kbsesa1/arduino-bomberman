@@ -6,16 +6,16 @@
 */
 #include "IRcomm.h"
 
-const int sendTimes[] = {20,40,150,60,20};//number of ticks to set led(low,high,start,stop,divider)
+const int sendTimes[] = {20,40,60,80,20};//number of ticks to set led(low,high,start,stop,divider)
 uint8_t sendFrame[23];//array to save lengths of pulses
 int sendIndex = 0;//index for pulsearray
 int newFrame = 0;//bool if arduino should start sending
 int sendingFrame = 0;//bool if arduino is busy sending
 int recievelookup[4];
-const int recieveTimes38_38[] = {40,60,172,80};
-const int recieveTimes38_56[] = {30,44,127,60};
-const int recieveTimes56_56[] = {42,63,178,83};
-const int recieveTimes56_38[] = {55,82,238,110};
+const int recieveTimes38_38[] = {40,60,80,100};
+const int recieveTimes38_56[] = {30,44,61,74};
+const int recieveTimes56_56[] = {47,70,96,118};
+const int recieveTimes56_38[] = {63,94,129,158};
 const int devPos = 5;
 const int devNeg = 5;
 //private recieve variables
@@ -23,18 +23,15 @@ volatile unsigned long IR_ticks;
 volatile unsigned long last_IR_ticks;
 volatile unsigned long pulseBegin = 0;
 volatile unsigned long pulseEnd = 0;
-volatile uint8_t frameBuffer[12];
+volatile uint8_t frameBuffer[11];
 volatile int frameIndex = 0;
-volatile bool frameAvailable = 0;
 volatile bool irAvaliable = 0;
-char recieveByte = 0;
 //debug recieve variables
 volatile bool unknownTime = 0;
-volatile int rawFrame[12];
+volatile int rawFrame[11];
 volatile int rawindex;
 volatile bool rawNew = 0;
-volatile int decodeFrame[12];
-char rawOutput[80];
+volatile int decodeFrame[11];
 
 IR::IR(){
 	
@@ -107,54 +104,50 @@ void IR::Init(int sendFreq,int recFreq){
 	
 }
 char IR::Recieve(){
-	return recieveByte;
-	
-}
-//print functions
-char* IR::printRaw(){
-	for (uint8_t i = 0;i<sizeof(rawOutput);i++)
+	irAvaliable = 0;
+	char output = 0;
+	for (int i = 0;i<8;i++)
 	{
-		rawOutput[i] = 0;
+		output |= (frameBuffer[i+1] << i);
 	}
-for (int i = 0;i<11;i++)
-{
-	char number[8];
-	itoa (rawFrame[i],number,10);
-strcat(rawOutput,number);
-strcat(rawOutput,", ");
-
-}
-strcat(rawOutput," \n");
-
-rawNew = 0;
-return rawOutput;
-}
-int IR::Available(){
-	if (frameAvailable)
+	uint8_t outParity = (output & 1);
+	return output;
+	
+	if (outParity == frameBuffer[9])
 	{
-		frameAvailable = 0;
-		char output = 0;
-		for (int i = 0;i<8;i++)
-		{
-			output |= (frameBuffer[i+1] << i);
-		}
-		uint8_t outParity = (output & 1);
 		
-		
-		if (outParity == frameBuffer[9])
-		{
-			recieveByte = output;
-			return 1;
-		}
-		else{
-			
-			return -1;
-		}
+		return output;
 	}
 	else{
+		
 		return 0;
 	}
 	
+}
+/*print functions
+void IR::printRaw(){
+for (int i = 0;i<11;i++)
+{
+USART_PutInt(rawFrame[i]);
+USART_PutString(", ");
+
+}
+USART_Transmit('\n');
+rawNew = 0;
+}
+void IR::printFrame(){
+for (int i = 0;i<11;i++)
+{
+USART_PutInt(frameBuffer[i]);
+USART_PutString(", ");
+
+}
+USART_Transmit('\n');
+
+}
+*/
+bool IR::Available(){
+	return irAvaliable;
 }
 bool IR::rawAvailable(){
 	return rawNew;
@@ -213,7 +206,7 @@ void decode(){
 		}
 		
 	}
-	frameAvailable = 1;
+	irAvaliable = 1;
 }
 
 ISR(TIMER2_COMPB_vect){
@@ -251,9 +244,6 @@ ISR(TIMER2_COMPB_vect){
 			TCCR2A &= ~(1 << COM2B0);
 		}
 	}
-	else{
-		TCCR2A &= ~(1 << COM2B0);
-	}
 	
 	
 }
@@ -264,32 +254,27 @@ ISR(INT0_vect){
 	pulseBegin = pulseEnd;
 	
 	//raw code
-	
-	if (pulsTime < 250 && pulsTime >= 120)
+	if (pulsTime < 95&&pulsTime > 0)
 	{
+		rawFrame[rawindex] = pulsTime;
+		rawindex++;
+		
+		
+		
+	}
+	else if (pulsTime < 200 && pulsTime > 95)
+	{
+		rawFrame[rawindex] = pulsTime;
 		rawindex = 0;
-		rawFrame[rawindex] = pulsTime;
-		rawindex++;
-		
-		
-	}
-	else if (pulsTime < 120 && pulsTime > 0)
-	{
-		rawFrame[rawindex] = pulsTime;
-		rawindex++;
-		if (rawindex >= 11)
+		rawNew = 1;
+		for (int i = 0;i<11;i++)
 		{
-			rawindex = 0;
-			rawNew = 1;
-			for (int i = 0;i<11;i++)
-			{
-				decodeFrame[i] = rawFrame[i];
-			}
-			decode();
+			decodeFrame[i] = rawFrame[i];
 		}
-		
-		
+		decode();
 	}
+	
+	
 	
 	
 }

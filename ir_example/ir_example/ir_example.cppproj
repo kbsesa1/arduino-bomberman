@@ -165,21 +165,30 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AVRmillis.cpp">
+    <Compile Include="lib\AVRmillis.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="AVRmillis.h">
+    <Compile Include="lib\AVRmillis.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\IRcomm.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\IRcomm.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\SimpleUart.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\SimpleUart.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="SimpleUart.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="SimpleUart.h">
-      <SubType>compile</SubType>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="lib" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>
