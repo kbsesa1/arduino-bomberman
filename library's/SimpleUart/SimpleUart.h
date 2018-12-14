@@ -12,18 +12,18 @@
 #include <avr/io.h>
 #include <stdio.h>
 #include <string.h>
-#include "SimpleUart.h"
 
 class UART
 {
 	public:
 	UART();
-	  void Init(unsigned long,unsigned long);
-	  void Transmit( unsigned char);
+	  void Init(unsigned long f_cpu,unsigned long baud);
+	  void Transmit( unsigned char data);
 	  unsigned char Receive();
-	  void PutString(char*);
-	  void PutInt(int);
-	  void PutUInt(int);
+	  void PutInt(int number);
+	  void PutUInt(unsigned int number);
+	  void PutHex(uint8_t data);
+	  void PutCString(const char* str);
 	private:
 	
 };

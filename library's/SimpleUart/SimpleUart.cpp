@@ -21,6 +21,7 @@ void UART::Init( unsigned long f_cpu,unsigned long baud)
 {
 	/*calculate baud register*/
 unsigned int ubrr = f_cpu/16/baud-1;
+ubrr = 8;
 	/*Set baud rate */
 	UBRR0H = (unsigned char)(ubrr>>8);
 	UBRR0L = (unsigned char)ubrr;
@@ -45,19 +46,42 @@ unsigned char UART::Receive()
 	/* Get and return received data from buffer */
 	return UDR0;
 }
-void UART::PutString(char* string){
-	for (int i = 0;i<strlen(string);i++)
-	{
-	Transmit(string[i]);
-	}
-}
+
 void UART::PutInt(int input){
 	char str[20];
 	sprintf(str, "%d", input);
-	PutString(str);
+	for (uint8_t i = 0;i<sizeof(str)-1;i++)
+	{
+		Transmit(str[i]);
+	}
 }
-void UART::PutUInt(int input){
+void UART::PutUInt(unsigned int input){
 	char str[20];
 	sprintf(str, "%u", input);
-	PutString(str);
+	for (uint8_t i = 0;i<sizeof(str)-1;i++)
+	{
+		Transmit(str[i]);
+	}
 }
+void UART::PutHex(uint8_t data){
+	uint8_t char1 = (data >> 4) & 0x0F;
+	uint8_t char2 = (data & 0x0F);
+	if (char1 >= 0x0A) char1 += 55;
+	else char1 += 48;
+	if (char2 >= 0x0A) char2 += 55;
+	else char2 += 48;
+	Transmit(char1);
+	Transmit(char2);
+	
+}
+ void UART::PutCString(const char* str){
+	 
+	 char message[strlen(str)+1];
+	 strcpy (message,str);
+	 message[sizeof(message)-1] = '\0';
+	 
+	 for (uint32_t i = 0;i<sizeof(message)-1;i++)
+	 {
+		 Transmit(message[i]);
+	 }
+ }

@@ -12,7 +12,6 @@
 #include <avr/io.h>
 #include <stdio.h>
 #include <string.h>
-#include "SimpleUart.h"
 
 class UART
 {
@@ -21,9 +20,10 @@ class UART
 	  void Init(unsigned long f_cpu,unsigned long baud);
 	  void Transmit( unsigned char data);
 	  unsigned char Receive();
-	  void PutString(char* C_string);
 	  void PutInt(int number);
-	  void PutUInt(int number);
+	  void PutUInt(unsigned int number);
+	  void PutHex(uint8_t data);
+	  void PutCString(const char* str);
 	private:
 	
 };
